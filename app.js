@@ -4,6 +4,26 @@
 const express = require('express');
 const morgan = require('morgan');
 
+
+//importing sequelize instance
+
+const { sequelize } = require('./models/index');
+
+//authenticate connection to the database
+sequelize
+  .authenticate()
+  .then(
+    () => {
+      console.log('Connection to the database successful!');
+    }
+  )
+  .catch(
+    (error) => {
+      console.log(`Error connecting to the database: Error: ${error} `);
+    }
+  );
+
+
 // variable to enable global error logging
 const enableGlobalErrorLogging = process.env.ENABLE_GLOBAL_ERROR_LOGGING === 'true';
 
