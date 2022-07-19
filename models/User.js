@@ -5,7 +5,7 @@ const { Model, DataTypes } = require('sequelize');
 
 
 module.exports = (sequelize) => {
-    class User extends Model {}
+    class User extends Model { }
     User.init({
 
         // id: {
@@ -30,8 +30,6 @@ module.exports = (sequelize) => {
 
             },
 
-
-
         },
         lastName: {
             type: DataTypes.STRING,
@@ -55,9 +53,9 @@ module.exports = (sequelize) => {
         emailAddress: {
             type: DataTypes.STRING,
             allowNull: false,
-            unique: true,
-
-
+            unique: {
+                msg: 'The email you entered already exists'
+            }, 
             validate: {
                 notEmpty: {
                     // custom error message
@@ -67,9 +65,9 @@ module.exports = (sequelize) => {
                     // custom error message
                     msg: 'Email Address is required',
                 },
-                unique: {
-                    msg: 'Email Address is already in use!',
-                },
+                // unique: {
+                //     msg: 'Email Address is already in use!',
+                // },
                 isEmail: {
                     msg: 'Please provide a valid email address',
                 }
