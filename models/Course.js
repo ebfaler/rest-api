@@ -14,11 +14,11 @@ module.exports = (sequelize) => {
       validate: {
         notEmpty: {
           // custom error message
-          msg: 'Please provide a value for the Title',
+          msg: 'Please provide a value for the title',
         },
         notNull: {
           // custom error message
-          msg: 'Title is required',
+          msg: 'title is required',
         }
       },
 
@@ -32,11 +32,11 @@ module.exports = (sequelize) => {
       validate: {
         notEmpty: {
           // custom error message
-          msg: 'Please provide a value for the Description',
+          msg: 'Please provide a value for the description',
         },
         notNull: {
           // custom error message
-          msg: 'Description is required',
+          msg: 'description is required',
         }
       },
 

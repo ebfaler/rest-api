@@ -21,11 +21,11 @@ module.exports = (sequelize) => {
             validate: {
                 notEmpty: {
                     // custom error message
-                    msg: 'Please provide a value for First Name',
+                    msg: 'Please provide a value for firstName',
                 },
                 notNull: {
                     // custom error message
-                    msg: 'First Name is required',
+                    msg: 'firstName is required',
                 }
 
             },
@@ -39,11 +39,11 @@ module.exports = (sequelize) => {
             validate: {
                 notEmpty: {
                     // custom error message
-                    msg: 'Please provide a value for Last Name',
+                    msg: 'Please provide a value for lastName',
                 },
                 notNull: {
                     // custom error message
-                    msg: 'Last Name is required',
+                    msg: 'lastName is required',
                 }
 
             },
@@ -59,17 +59,17 @@ module.exports = (sequelize) => {
             validate: {
                 notEmpty: {
                     // custom error message
-                    msg: 'Please provide a value for Email Address',
+                    msg: 'Please provide a value for emailAddress',
                 },
                 notNull: {
                     // custom error message
-                    msg: 'Email Address is required',
+                    msg: 'emailAddress is required',
                 },
                 // unique: {
                 //     msg: 'Email Address is already in use!',
                 // },
                 isEmail: {
-                    msg: 'Please provide a valid email address',
+                    msg: 'Please provide a valid emailAddress',
                 }
 
             },
@@ -83,11 +83,11 @@ module.exports = (sequelize) => {
             validate: {
                 notEmpty: {
                     // custom error message
-                    msg: 'Please provide a value for Password',
+                    msg: 'Please provide a value for password',
                 },
                 notNull: {
                     // custom error message
-                    msg: 'Password is required',
+                    msg: 'password is required',
                 }
 
             },

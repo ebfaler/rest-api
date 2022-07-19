@@ -14,7 +14,7 @@ const { Course } = require('../models/');
 router.get('/', asyncHandler(async (req, res) => {
     let courses = await Course.findAll();
     res.status(200).json(courses);
-  
+
 })
 
 );
@@ -25,22 +25,22 @@ router.get('/', asyncHandler(async (req, res) => {
 //a 200 HTTP status code.
 
 router.get('/:id', asyncHandler(async (req, res) => {
-  
-// - If the book exists, render the update-book template,
-  // - Else:
-  //   * Create a new 404 error
-  //   * Forward the error to the global error handler
-  const courses = await Course.findByPk(req.params.id);
-  if(courses) {
-  console.log("displaying courses");
-  res.status(200).json(courses);
-} else {
-    const err = new Error();
-    err.status = 404;
-    // err.message = `Looks like the page you requested doesn't exist.`
-    next(err);
 
-}
+    // - If the book exists, render the update-book template,
+    // - Else:
+    //   * Create a new 404 error
+    //   * Forward the error to the global error handler
+    const courses = await Course.findByPk(req.params.id);
+    if (courses) {
+        console.log("displaying courses");
+        res.status(200).json(courses);
+    } else {
+        const err = new Error();
+        err.status = 404;
+        // err.message = `Looks like the page you requested doesn't exist.`
+        next(err);
+
+    }
 
 })
 
@@ -56,16 +56,16 @@ router.post('/', asyncHandler(async (req, res) => {
     try {
         await Course.create(req.body);
         res.status(201).json({ "message": "Course successfully created!" });
-      } catch (error) {
+    } catch (error) {
         console.log('ERROR: ', error.name);
-    
+
         if (error.name === 'SequelizeValidationError' || error.name === 'SequelizeUniqueConstraintError') {
-          const errors = error.errors.map(err => err.message);
-          res.status(400).json({ errors });   
+            const errors = error.errors.map(err => err.message);
+            res.status(400).json({ errors });
         } else {
-          throw error;
+            throw error;
         }
-      }
+    }
 })
 
 );
@@ -75,9 +75,25 @@ router.post('/', asyncHandler(async (req, res) => {
 
 
 router.put('/:id', asyncHandler(async (req, res) => {
-  
-})
+    try {
+        const courses = await Course.findByPk(req.params.id);
+        if (courses) {
 
+            await courses.update(req.body);
+            res.status(204).end();
+        } else {
+            res.status(404).end();
+        }
+    } catch (error) {
+        // console.log('ERROR: ', error.name);
+        if (error.name === 'SequelizeValidationError' || error.name === 'SequelizeUniqueConstraintError') {
+            const errors = error.errors.map(err => err.message);
+            res.status(400).json({ errors });
+        } else {
+            throw error;
+        }
+    }
+})
 );
 
 
@@ -86,7 +102,7 @@ router.put('/:id', asyncHandler(async (req, res) => {
 
 
 router.delete('/:id', asyncHandler(async (req, res) => {
-   
+
 })
 
 );
