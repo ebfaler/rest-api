@@ -2,18 +2,13 @@
 
 
 const { Model, DataTypes } = require('sequelize');
-
+const bcrypt = require('bcryptjs');
 
 module.exports = (sequelize) => {
     class User extends Model { }
     User.init({
 
-        // id: {
-        //     type: Sequelize.INTEGER,
-        //     primaryKey: true,
-        //     autoIncrement: true,
-        // },
-
+  
         firstName: {
             type: DataTypes.STRING,
             allowNull: false,
@@ -79,7 +74,11 @@ module.exports = (sequelize) => {
             type: DataTypes.STRING,
             allowNull: false,
 
-
+            set(val) {
+                      const hashedPassword = bcrypt.hashSync(val,10);
+                      this.setDataValue('password', hashedPassword)
+                },
+        
             validate: {
                 notEmpty: {
                     // custom error message
@@ -94,16 +93,15 @@ module.exports = (sequelize) => {
 
 
         },
-
-    }, { sequelize });
+    },
+    
+    { sequelize });
 
     User.associate = (models) => {
         // one to many association.
 
         User.hasMany(models.Course, { foreignKey: 'userId' });
-
-
-    };
+     };
 
     return User;
 };

@@ -3,14 +3,17 @@ var router = express.Router();
 
 
 const { User } = require('../models/');
+
+//importing middleware
 const { asyncHandler } = require('../middleware/async-handler');
+const { authenticateUser } = require('../middleware/authenticate-user');
 
 /* GET route */
 
 //route will return all properties and values for the currently
 // authenticated User along with a 200 HTTP status code.
 
-router.get('/', asyncHandler(async (req, res) => {
+router.get('/', authenticateUser,asyncHandler(async (req, res) => {
 
   let users = await User.findAll();
   res.status(200).json(users);

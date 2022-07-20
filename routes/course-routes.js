@@ -1,7 +1,9 @@
 var express = require('express');
 var router = express.Router();
 
+//importing middleware
 const { asyncHandler } = require('../middleware/async-handler');
+const { authenticateUser } = require('../middleware/authenticate-user');
 
 const { Course } = require('../models/');
 
@@ -51,7 +53,7 @@ router.get('/:id', asyncHandler(async (req, res) => {
 //will create a new course, set the Location header to the URI for the newly created course
 // and return a 201 HTTP status code and no content.
 
-router.post('/', asyncHandler(async (req, res) => {
+router.post('/', authenticateUser, asyncHandler(async (req, res) => {
 
     try {
         await Course.create(req.body);
@@ -74,7 +76,7 @@ router.post('/', asyncHandler(async (req, res) => {
 //will update the corresponding course and return a 204 HTTP status code and no content.
 
 
-router.put('/:id', asyncHandler(async (req, res) => {
+router.put('/:id', authenticateUser, asyncHandler(async (req, res) => {
     try {
         const courses = await Course.findByPk(req.params.id);
         if (courses) {
@@ -85,7 +87,7 @@ router.put('/:id', asyncHandler(async (req, res) => {
             res.status(404).end();
         }
     } catch (error) {
-        // console.log('ERROR: ', error.name);
+
         if (error.name === 'SequelizeValidationError' || error.name === 'SequelizeUniqueConstraintError') {
             const errors = error.errors.map(err => err.message);
             res.status(400).json({ errors });
@@ -101,11 +103,29 @@ router.put('/:id', asyncHandler(async (req, res) => {
 //will delete the corresponding course and return a 204 HTTP status code and no content.
 
 
-router.delete('/:id', asyncHandler(async (req, res) => {
+router.delete('/:id',authenticateUser, asyncHandler(async (req, res) => {
 
-})
 
-);
+        const courses = await Course.findByPk(req.params.id);
+        if (courses) {
+
+            await courses.destroy(req.body);
+            res.status(204).end();
+            console.log("Course deleted");
+        } else {
+            res.status(404).end();
+        }
+    }
+    
+    // catch (error) {
+    //     // console.log('ERROR: ', error.name);
+    //     if (error.name === 'SequelizeValidationError' || error.name === 'SequelizeUniqueConstraintError') {
+    //         const errors = error.errors.map(err => err.message);
+    //         res.status(400).json({ errors });
+    //     } else {
+    //         throw error;
+    //     }
+ ));
 
 
 
