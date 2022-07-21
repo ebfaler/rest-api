@@ -15,8 +15,17 @@ const { authenticateUser } = require('../middleware/authenticate-user');
 
 router.get('/', authenticateUser,asyncHandler(async (req, res) => {
 
-  let users = await User.findAll();
-  res.status(200).json(users);
+ //the current authenticated user's information is retrieved from the Request object's 
+ //currentUser property:
+const user = req.currentUser;
+
+  res.status(200).json({
+    id: user.id,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    emailAddress: user.emailAddress,
+    password: user.password,
+  });
 
 })
 );
@@ -42,7 +51,5 @@ router.post('/', asyncHandler(async (req, res) => {
     }
   }
 }));
-
-
 
 module.exports = router;

@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
+
 //importing middleware
 const { asyncHandler } = require('../middleware/async-handler');
 const { authenticateUser } = require('../middleware/authenticate-user');
@@ -58,7 +59,10 @@ router.post('/', authenticateUser, asyncHandler(async (req, res) => {
     try {
         await Course.create(req.body);
         res.status(201).json({ "message": "Course successfully created!" });
-    } catch (error) {
+    }
+
+
+    catch (error) {
         console.log('ERROR: ', error.name);
 
         if (error.name === 'SequelizeValidationError' || error.name === 'SequelizeUniqueConstraintError') {
@@ -78,19 +82,26 @@ router.post('/', authenticateUser, asyncHandler(async (req, res) => {
 
 router.put('/:id', authenticateUser, asyncHandler(async (req, res) => {
     try {
+
+        const user = req.currentUser;
         const courses = await Course.findByPk(req.params.id);
+
         if (courses) {
+            if (user && user.id == courses.userId) {
 
-            await courses.update(req.body);
-            res.status(204).end();
+                await courses.update(req.body);
+                res.status(204).end();
+            } else {
+                res.status(403).json({ "message": "You do not have permission to update this course" }).end();
+            }
         } else {
-            res.status(404).end();
+            res.status(404).json({ "message": "Course does not exist" }).end();
         }
-    } catch (error) {
-
+    }
+    catch (error) {
         if (error.name === 'SequelizeValidationError' || error.name === 'SequelizeUniqueConstraintError') {
             const errors = error.errors.map(err => err.message);
-            res.status(400).json({ errors });
+            res.status(400).json({ errors }).end();
         } else {
             throw error;
         }
@@ -99,33 +110,48 @@ router.put('/:id', authenticateUser, asyncHandler(async (req, res) => {
 );
 
 
+
 /* DELETE route */
 //will delete the corresponding course and return a 204 HTTP status code and no content.
 
 
-router.delete('/:id',authenticateUser, asyncHandler(async (req, res) => {
+router.delete('/:id', authenticateUser, asyncHandler(async (req, res) => {
 
+    const user = req.currentUser;
+    const courses = await Course.findByPk(req.params.id);
 
-        const courses = await Course.findByPk(req.params.id);
-        if (courses) {
+    if (courses) {
+        if (user && user.id == courses.userId) {
 
             await courses.destroy(req.body);
-            res.status(204).end();
-            console.log("Course deleted");
+            res.status(204).json({ "message": "Course succesfully deleted" }).end();
         } else {
-            res.status(404).end();
+            res.status(403).json({ "message": "You do not have permission to delete this course" }).end();
         }
     }
-    
-    // catch (error) {
-    //     // console.log('ERROR: ', error.name);
-    //     if (error.name === 'SequelizeValidationError' || error.name === 'SequelizeUniqueConstraintError') {
-    //         const errors = error.errors.map(err => err.message);
-    //         res.status(400).json({ errors });
-    //     } else {
-    //         throw error;
-    //     }
- ));
+    else {
+        res.status(404).json({"message": "Course does not exist"}).end();
+    }
+
+}));
+
+
+
+// router.delete('/:id',authenticateUser, asyncHandler(async (req, res) => {
+
+//     const user = req.currentUser;
+//     const courses = await Course.findByPk(req.params.id);
+//     if (courses) {
+
+//         await courses.destroy(req.body);
+//         res.status(204).end();
+//         console.log("Course deleted");
+//     } else {
+//         res.status(404).end();
+//     }
+// }
+
+// ));
 
 
 

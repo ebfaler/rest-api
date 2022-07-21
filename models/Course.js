@@ -49,19 +49,19 @@ module.exports = (sequelize) => {
     materialsNeeded: {
       type: DataTypes.STRING,
    
-    },
-
-    userId: {
-      type: DataTypes.STRING,
-     
-    },
+    }
 
   }, { sequelize });
 
   Course.associate = (models) => {
     // one-to-one association.
 
-    Course.belongsTo(models.User, { foreignKey: 'userId' });
+    Course.belongsTo(models.User, { foreignKey: {
+      
+      fieldName:'userId',
+      allowNull: false
+  }} ,
+    );
 
 
   };

@@ -60,9 +60,6 @@ module.exports = (sequelize) => {
                     // custom error message
                     msg: 'emailAddress is required',
                 },
-                // unique: {
-                //     msg: 'Email Address is already in use!',
-                // },
                 isEmail: {
                     msg: 'Please provide a valid emailAddress',
                 }
@@ -100,7 +97,11 @@ module.exports = (sequelize) => {
     User.associate = (models) => {
         // one to many association.
 
-        User.hasMany(models.Course, { foreignKey: 'userId' });
+        User.hasMany(models.Course, { foreignKey: {
+      
+            fieldName:'userId',
+            allowNull: false
+        }});
      };
 
     return User;
