@@ -38,7 +38,9 @@ const user = req.currentUser;
 router.post('/', asyncHandler(async (req, res) => {
   try {
     await User.create(req.body);
-    res.status(201).json({ "message": "User successfully created!" });
+   // setting location header to '/'
+    res.location('/');
+    res.status(201).end();
   } catch (error) {
     console.log('ERROR: ', error.name);
 
