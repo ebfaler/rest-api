@@ -23,8 +23,7 @@ const user = req.currentUser;
     id: user.id,
     firstName: user.firstName,
     lastName: user.lastName,
-    emailAddress: user.emailAddress,
-    password: user.password,
+    emailAddress: user.emailAddress
   });
 
 })

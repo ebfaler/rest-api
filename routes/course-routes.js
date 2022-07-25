@@ -15,7 +15,9 @@ const { Course } = require('../models/');
 //course and a 200 HTTP status code.
 
 router.get('/', asyncHandler(async (req, res) => {
-    let courses = await Course.findAll();
+    let courses = await Course.findAll({
+        attributes: {exclude: ['createdAt', 'updatedAt']}
+    });
     res.status(200).json(courses);
 
 })
@@ -33,7 +35,9 @@ router.get('/:id', asyncHandler(async (req, res) => {
     // - Else:
     //   * Create a new 404 error
     //   * Forward the error to the global error handler
-    const courses = await Course.findByPk(req.params.id);
+    const courses = await Course.findByPk(req.params.id, {
+        attributes: {exclude: ['createdAt', 'updatedAt']}
+    });
     if (courses) {
         console.log("displaying courses");
         res.status(200).json(courses);
@@ -134,25 +138,6 @@ router.delete('/:id', authenticateUser, asyncHandler(async (req, res) => {
     }
 
 }));
-
-
-
-// router.delete('/:id',authenticateUser, asyncHandler(async (req, res) => {
-
-//     const user = req.currentUser;
-//     const courses = await Course.findByPk(req.params.id);
-//     if (courses) {
-
-//         await courses.destroy(req.body);
-//         res.status(204).end();
-//         console.log("Course deleted");
-//     } else {
-//         res.status(404).end();
-//     }
-// }
-
-// ));
-
 
 
 module.exports = router; 
