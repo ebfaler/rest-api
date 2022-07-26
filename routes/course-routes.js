@@ -72,8 +72,8 @@ router.post('/', authenticateUser, asyncHandler(async (req, res) => {
     let course;
     try {
         course = await Course.create(req.body);
-        // set location header to '/'
-        res.location('/' + course.id);
+        // set location header 
+        res.location('/courses/' + course.id);
         res.status(201).end();
     }
 

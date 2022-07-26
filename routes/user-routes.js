@@ -37,8 +37,9 @@ const user = req.currentUser;
 
 router.post('/', asyncHandler(async (req, res) => {
   try {
-    await User.create(req.body);
-   // setting location header to '/'
+    const user = await User.create(req.body);
+   // setting location header
+    // res.location('/api/users/' + user.id);
     res.location('/');
     res.status(201).end();
   } catch (error) {
